@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="tables">
+
+        <item>
+            CREATE TABLE IF NOT EXISTS FORM
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                program TEXT NOT NULL COLLATE NOCASE,
+                username TEXT NOT NULL COLLATE NOCASE,
+                form_name TEXT NOT NULL COLLATE NOCASE,
+                p_id TEXT COLLATE NOCASE,
+                form_date DATETIME,
+                timestamp DATETIME NOT NULL,
+                location TEXT NOT NULL COLLATE NOCASE,
+                form_object BLOB COLLATE NOCASE,
+                encounter_id INT COLLATE NOCASE
+            )
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS form_value
+            (
+                id INTEGER PRIMARY KEY  AUTOINCREMENT,
+                form_id INT NOT NULL COLLATE NOCASE,
+                field_name TEXT NOT NULL COLLATE NOCASE,
+                value TEXT NOT NULL COLLATE NOCASE,
+                FOREIGN KEY (form_id) REFERENCES FORM(id)
+            )
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS location
+            (
+                location_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                location_name VARCHAR UNIQUE NOT NULL,
+                uuid VARCHAR UNIQUE NOT NULL,
+                parent_uuid VARCHAR,
+                fast_location CHAR DEFAULT \'Y\' NOT NULL,
+                pet_location CHAR DEFAULT \'Y\' NOT NULL,
+                childhood_tb_location CHAR DEFAULT \'Y\' NOT NULL,
+                comorbidities_location CHAR DEFAULT \'Y\' NOT NULL,
+                pmdt_location CHAR DEFAULT \'Y\' NOT NULL,
+                aic_location CHAR DEFAULT \'Y\' NOT NULL,
+                primary_contact VARCHAR,
+                address1 VARCHAR,
+                address2 VARCHAR,
+                address3 VARCHAR,
+                city_village VARCHAR COLLATE NOCASE,
+                state_province VARCHAR COLLATE NOCASE,
+                county_district VARCHAR COLLATE NOCASE,
+                description TEXT
+            )
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS users
+            (
+                user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                provider_uuid VARCHAR UNIQUE NOT NULL,
+                username VARCHAR UNIQUE NOT NULL COLLATE NOCASE,
+                fullName VARCHAR NOT NULL,
+                uuid VARCHAR UNIQUE NOT NULL,
+                role VARCHAR NOT NULL,
+                password VARCHAR,
+                description TEXT
+            );
+
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS identifier_type
+            (
+                identifier_type_id INTEGER PRIMARY KEY UNIQUE NOT NULL,
+                identifier_name VARCHAR UNIQUE NOT NULL,
+                uuid VARCHAR UNIQUE NOT NULL,
+                has_check_digit CHAR DEFAULT \'Y\' NOT NULL,
+                description TEXT
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS encounter_type
+            (
+                encounter_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                edit_privilege VARCHAR,
+                view_privilege VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS person_attribute_type
+            (
+                person_attribute_type VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                format VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS person_attribute
+            (
+                uuid VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                patientId VARCHAR,
+                value VARCHAR,
+                person_attribute_type VARCHAR UNIQUE NOT NULL
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS patient
+            (
+                patient_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR,
+                identifier VARCHAR UNIQUE NOT NULL,
+                external_id VARCHAR,
+                enrs VARCHAR,
+                indexcasenumber VARCHAR,
+                endtb_emr_id VARCHAR,
+                openmrs_identifier VARCHAR,
+                in_fast CHAR DEFAULT \'Y\' NOT NULL,
+                in_pet CHAR DEFAULT \'Y\' NOT NULL,
+                in_childhood_tb CHAR DEFAULT \'Y\' NOT NULL,
+                in_comorbidities CHAR DEFAULT \'Y\' NOT NULL,
+                in_pmdt CHAR DEFAULT \'Y\' NOT NULL,
+                first_name VARCHAR NOT NULL,
+                last_name VARCHAR NOT NULL,
+                gender CHAR DEFAULT \'M\' NOT NULL,
+                birthdate DATETIME NOT NULL,
+                cityVillage VARCHAR,
+                countyDistrict VARCHAR,
+                stateProvince VARCHAR,
+                country VARCHAR,
+                latitude DOUBLE,
+                longitude DOUBLE,
+                address_uuid VARCHAR,
+                birthplace VARCHAR,
+                citizenship VARCHAR,
+                maritalstatus VARCHAR,
+                healthcenter VARCHAR,
+                healthdistrict VARCHAR,
+                mothername VARCHAR,
+                primarycontact VARCHAR,
+                primarycontactowner VARCHAR,
+                secondarycontact VARCHAR,
+                secondarycontactOwner VARCHAR,
+                ethnicity VARCHAR,
+                educationlevel VARCHAR,
+                employmentstatus VARCHAR,
+                occupation VARCHAR,
+                incomeClass VARCHAR,
+                mothertongue VARCHAR,
+                nationalid VARCHAR,
+                nationalidowner VARCHAR,
+                guardianname VARCHAR,
+                address1 VARCHAR,
+                address2 VARCHAR,
+                address3 VARCHAR,
+                description VARCHAR,
+                tertiarycontact VARCHAR,
+                quaternarycontact VARCHAR,
+                treatmentsupporter VARCHAR
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS concept
+            (
+                concept_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                full_name VARCHAR UNIQUE,
+                var_name VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL,
+                data_type VARCHAR NOT NULL
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS encounter
+            (
+                encounter_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR,
+                encounterType VARCHAR,
+                encounterDatetime datetime,
+                encounterLocation VARCHAR,
+                patientId INT NOT NULL COLLATE NOCASE,
+                form_date VARCHAR,
+                dateCreated datetime default current_timestamp,
+                FOREIGN KEY (patientId) REFERENCES PATIENT(patient_id)
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS obs
+            (
+                obs_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR,
+                encounter_id INT NOT NULL COLLATE NOCASE,
+                conceptName TEXT NOT NULL COLLATE NOCASE,
+                value TEXT NOT NULL COLLATE NOCASE,
+                FOREIGN KEY (encounter_id) REFERENCES ENCOUNTER(encounter_id)
+            );
+        </item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS offline_form
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                username TEXT NOT NULL COLLATE NOCASE,
+                form TEXT NOT NULL COLLATE NOCASE,
+                pid TEXT COLLATE NOCASE,
+                uri TEXT NOT NULL COLLATE NOCASE,
+                content TEXT NOT NULL COLLATE NOCASE,
+                form_id INT COLLATE NOCASE
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS test_id
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                pid TEXT COLLATE NOCASE,
+                form TEXT NOT NULL COLLATE NOCASE,
+                test_id TEXT NOT NULL COLLATE NOCASE,
+                encounterDateTime TEXT NOT NULL COLLATE NOCASE
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS program
+            (
+                program_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                uuid VARCHAR UNIQUE NOT NULL,
+                name TEXT NOT NULL COLLATE NOCASE,
+                description TEXT NOT NULL COLLATE NOCASE
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS country
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS province
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS district
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+
+        <item>
+            CREATE TABLE IF NOT EXISTS city
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS address_hierarchy
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                country_id  INT NOT NULL COLLATE NOCASE,
+                province_id INT NOT NULL COLLATE NOCASE,
+                district_id INT NOT NULL COLLATE NOCASE,
+                city_id INT NOT NULL COLLATE NOCASE,
+                FOREIGN KEY (country_id) REFERENCES country(id),
+                FOREIGN KEY (province_id) REFERENCES province(id),
+                FOREIGN KEY (district_id) REFERENCES district(id),
+                FOREIGN KEY (city_id) REFERENCES city(id)
+            );
+		</item>
+
+        <item>
+            CREATE TABLE IF NOT EXISTS town
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name VARCHAR UNIQUE NOT NULL
+            );
+		</item>
+
+    </string-array>
+
+</resources>

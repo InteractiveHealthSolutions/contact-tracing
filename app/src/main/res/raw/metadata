@@ -1,0 +1,58 @@
+-- Identifier Types
+INSERT OR IGNORE INTO identifier_type VALUES(1,'OpenMRS Identification Number','8d793bee-c2cc-11de-8d13-0010c6dffd0f','N','Unique number used in OpenMRS');
+INSERT OR IGNORE INTO identifier_type VALUES(2,'Old Identification Number','8d79403a-c2cc-11de-8d13-0010c6dffd0f','N','Number given out prior to the OpenMRS system (No check digit)');
+INSERT OR IGNORE INTO identifier_type VALUES(3,'Patient ID','05a29f94-c0ed-11e2-94be-8c13b969e334','Y','OpenMRS patient identifier, with check-digit');
+INSERT OR IGNORE INTO identifier_type VALUES(4,'ENRS','0481be90-41be-4aa2-b0dc-0e82ccff6f5c','N','Registration ID assigned to MDR-TB patients');
+INSERT OR IGNORE INTO identifier_type VALUES(5,'Index Case Number','b84d36ca-bfbf-4f95-8eb2-0296477a6f37','N','Patient ID in an external MRS, like MR. No.');
+INSERT OR IGNORE INTO identifier_type VALUES(6,'INDEX CONTACT IDENTIFIER','6ad8d4b1-53c7-44ea-b3a3-767d6d3be4e0','N','');
+
+
+-- Encounter
+-- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
+INSERT OR IGNORE INTO encounter_type VALUES ('CONTACT INVESTIGATION',null,null,'eb898d54-a233-4852-8378-1e94bf987cfa');
+
+
+
+-- Concepts
+
+
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT NAME',NULL,'Text','8bafb997-303e-482f-8bb3-162b0337631b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX CASE NAME',NULL,'Text','538735d2-569c-47f2-91b9-89e740789500');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT FOUND',NULL,'Coded','515ccc05-d821-4053-b790-c062e0506367');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DATE CONTACT SCREENED',NULL,'Datetime','4dac146b-a338-4caf-87ed-c44acfd17280');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HAVE COUGH',NULL,'Coded','ed4a0429-d9fc-4fe3-af60-1026a4f639fc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUGHING HOW LONG',NULL,'Coded','091e62d6-0cb9-42a3-aed8-d27ec43f3879');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUGHING BLOOD',NULL,'Coded','f9bbdb1c-2e1b-4912-b1a0-67f75c00b201');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HAVE FEVER',NULL,'Coded','311f50ed-988c-42fb-9d57-40d4de714ea4');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FEVER HOW LONG',NULL,'Numeric','d80a7023-14a2-4d95-9121-afbcb803a9cc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WEIGHT LOSS 3KG PER MONTH',NULL,'Coded','259e2f7e-3d01-440f-8c55-25cd5aea4e02');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABNORMAL NIGHTS SWEATS',NULL,'Coded','0f067ef8-f2d9-4e9e-8363-7eebeae5b91a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WEIGHT LOSS OR FAILURE TO GAIN WEIGHT',NULL,'Coded','bca0f20e-72b1-455a-a3b4-bf6e9b3f4fe1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WEIGHT MEASURING PERIOD',NULL,'Coded','d89c60bc-f48a-4883-abd2-e2660bf2c2bc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SWELLING OR LUMPS',NULL,'Coded','ffbdbeb2-dccc-4f54-b71e-f900278c6e70');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HAD TB BEFORE',NULL,'Coded','fa1f5092-d3d7-4066-a799-1aa066e607c2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIV TEST DONE',NULL,'Coded','1a04f87e-f290-462d-bae6-0c83a0a05946');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIV RESULT',NULL,'Coded','be2f2581-4775-418b-bdce-ef9bd4720cf3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT REFERRED FOR EVALUATION',NULL,'Coded','99b84ff4-f76a-44f7-8e6c-6bbe0948097e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SYMPTOM SCREEN',NULL,'Coded','a4f1c8b3-107f-4a58-8dac-68445bd53a34');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WELL','Well','Boolean','dbe5a47c-f4c9-43b9-8d21-90c9e42d2683');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SYMPTOMATIC','Symptomatic','N/A','80904c67-3eff-11e7-ba14-080027089398');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('YES','Yes','N/A','80904b84-3eff-11e7-ba14-080027089398');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NO','No','N/A','80904bcf-3eff-11e7-ba14-080027089398');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POSITIVE','Positive','N/A','808fe1c3-3eff-11e7-ba14-080027089398');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEGATIVE','Negitive','N/A','808fc452-3eff-11e7-ba14-080027089398');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT TESTED','Not Tested','Boolean','2ffd2171-8610-4b75-99c8-c8fa18cd1e6f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LESS THAN ONE MONTH','less than 1 month','Boolean','c6ad6c1b-a8dc-4082-8b6f-f7fc5ecac247');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE TO TWO MONTHS','1-2 month','Boolean','887b8f13-47df-4f8a-add1-020cb228b0f8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GREATER THAN TWO MONTHS','greater than 2 months','Boolean','b688e829-b4a5-4370-a09a-70245faac4df');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LESS THAN ONE WEEK','less than 1 week','Boolean','5a4e0ab7-88cb-4b90-bb2f-b3d195fb306f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE TO TWO WEEK','1-2 weeks','Boolean','a5b37bd6-2fde-4679-8f0f-11b056b0a339');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TWO TO FOUR WEEKS','2 weeks-4 weeks','Boolean','defcf8b5-9ebe-4637-88d3-d2596237b3d7');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GREATER THAN FOUR WEEKS','greater than 4 weeks','Boolean','8abb6266-13de-4b2d-81ba-c7a118f54d2c');
+
+
+--Person Attributes
+
+INSERT OR IGNORE INTO person_attribute_type VALUES ('Index Case Number','java.lang.String','191658f2-59e9-4d6f-8223-a31124eaa0ca');

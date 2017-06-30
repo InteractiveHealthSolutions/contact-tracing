@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Contact Tracing</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main">Home</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="submit">Submit Form</string>
+    <string name="prompt_cough">Cough?</string>
+    <string name="prompt_cough_duration">How Long?</string>
+    <string name="prompt_cough_blood">Coughing Blood ?</string>
+    <string name="prompt_fever">Fever?</string>
+    <string name="prompt_fever_duration">If fever how long?</string>
+    <string name="prompt_contact_id">Contact ID</string>
+    <string name="promt_weight_loss_adult">Weight Loss 3kg/month</string>
+    <string name="prompt_sweat">Abnormal nights sweats(Past 4 wks)</string>
+    <string name="prompt_weight_loss_child">Weight Loss OR Failure to gain weight (for Children)</string>
+    <string name="prompt_swelling">Swelling or lumps? (neck,armpits,groin)</string>
+    <string name="prompt_tb_before">Had TB before?</string>
+    <string name="prompt_hiv_before">Is HIV test done</string>
+    <string name="prompt_hiv_result">What is contact HIV Results?</string>
+    <string name="prompt_contact_refered">Contact referred for evaluation?</string>
+    <string name="prompt_sym_screen">SYMPTOM SCREEN</string>
+    <string name="prompt_index_id">Index ID</string>
+    <string name="save">Save</string>
+    <string name="upload">Upload All</string>
+    <string name="offline_form">Saved Forms</string>
+    <string name="search_contact">Search Contacts</string>
+    <string name="contact_form">Contact Form</string>
+
+
+    <string-array name="cough_duration_array">
+        <item>less than 1 week</item>
+        <item>1-2 weeks</item>
+        <item>2 weeks-4 weeks</item>
+        <item>greater than 4 weeks</item>
+    </string-array>
+
+    <string-array name="weight_loss_array">
+        <item>less than 1 month</item>
+        <item>1-2 month</item>
+        <item>greater than 2 months</item>
+    </string-array>
+
+</resources>
