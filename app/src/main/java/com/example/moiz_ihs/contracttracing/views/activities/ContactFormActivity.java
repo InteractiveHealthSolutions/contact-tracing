@@ -370,7 +370,7 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
 
         if(returnMessage.equalsIgnoreCase("SUCCESS")) {
             String contactUuid = serverService.getPatientUuid(contactDetail.getContactId());
-            String personAttribute = serverService.savePersonAttribute("Index Case Number", contactDetail.getIndexId(), contactUuid);
+            String personAttribute = serverService.savePersonAttribute("Contact Index Case Number", contactDetail.getIndexId(), contactUuid);
 
 
             String indexUuid = serverService.getPatientUuid(contactDetail.getIndexId());

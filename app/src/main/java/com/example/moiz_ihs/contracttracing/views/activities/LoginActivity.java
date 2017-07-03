@@ -93,9 +93,8 @@ public class LoginActivity extends AppCompatActivity implements Sendable {
 
                 //   if(CommonUtils.isNetworkConnected(LoginActivity.this))
                 App.setCommunicationMode("REST");
-                // else
-                //   App.setMode("OFFLINE");
-
+                App.setUsername(mEmailView.getText().toString());
+                App.setPassword(mPasswordView.getText().toString());
 
                 if (validateForm()) {
 
@@ -103,8 +102,7 @@ public class LoginActivity extends AppCompatActivity implements Sendable {
                     if (DevicePreference.getInstance().getUser() != null) {
                         if (mEmailView.getText().toString().equals(DevicePreference.getInstance().getUser().getUsername()) && mPasswordView.getText().toString().equals(DevicePreference.getInstance().getUser().getPassword())) {
 
-                            App.setUsername(mEmailView.getText().toString());
-                            App.setPassword(mPasswordView.getText().toString());
+
                             if(!mRememberMe.isChecked()) {
                                 DevicePreference.getInstance().saveUser(null);
                             }
@@ -112,6 +110,10 @@ public class LoginActivity extends AppCompatActivity implements Sendable {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
 
+                        }
+                        else
+                        {
+                            AuthenticateUser();
                         }
                     }
 //            else
@@ -211,6 +213,7 @@ public class LoginActivity extends AppCompatActivity implements Sendable {
                         @Override
                         public void run() {
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                            removeLoader();
                         }
                     });
                 }

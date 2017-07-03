@@ -55,4 +55,4 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GREATER THAN FO
 
 --Person Attributes
 
-INSERT OR IGNORE INTO person_attribute_type VALUES ('Index Case Number','java.lang.String','191658f2-59e9-4d6f-8223-a31124eaa0ca');
+INSERT OR IGNORE INTO person_attribute_type VALUES ('Contact Index Case Number','java.lang.String','191658f2-59e9-4d6f-8223-a31124eaa0ca');
