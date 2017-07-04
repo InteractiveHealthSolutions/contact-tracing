@@ -41,6 +41,7 @@
     <string name="offline_form">Saved Forms</string>
     <string name="search_contact">Search Contacts</string>
     <string name="contact_form">Contact Form</string>
+    <string name="promt_contact_found">Contact found?</string>
 
 
     <string-array name="cough_duration_array">

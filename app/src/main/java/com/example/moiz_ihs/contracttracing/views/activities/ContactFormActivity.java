@@ -126,6 +126,8 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         binding.cough.setOnCheckedChangeListener(new CustomCheckedListener());
         binding.fever.setOnCheckedChangeListener(new CustomCheckedListener());
         binding.weightLossChild.setOnCheckedChangeListener(new CustomCheckedListener());
+        binding.contactFound.setOnCheckedChangeListener(new CustomCheckedListener());
+
         binding.saveForm.setOnClickListener(new CustomClickListener());
         binding.datePicker.setOnClickListener(new CustomClickListener());
 
@@ -201,6 +203,23 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
                 }
             }
 
+            if(group.equals(binding.contactFound))
+            {
+                RadioButton radio = (RadioButton)group.findViewById(checkedId);
+                if(radio.isChecked())
+                {
+                    if(radio.getText().equals("No"))
+                    {
+                        binding.layoutForm.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        binding.layoutForm.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+
 
         }
     }
@@ -243,63 +262,59 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         boolean allClear = true;
 
         Validator validator = new Validator();
-        if(validator.validateRadioGroupEmpty(binding.cough) || validator.validateRadioGroupEmpty(binding.fever) || validator.validateRadioGroupEmpty(binding.nightSweat) || validator.validateRadioGroupEmpty(binding.swelling) || validator.validateRadioGroupEmpty(binding.tbBefore) || validator.validateRadioGroupEmpty(binding.hivDone) || validator.validateRadioGroupEmpty(binding.hivResult)|| validator.validateRadioGroupEmpty(binding.contactReferred)|| validator.validateRadioGroupEmpty(binding.symptomScreen)  ) {
+
+        if(validator.validateRadioGroupEmpty(binding.contactFound))
+        {
             allClear = false;
-            Toast.makeText(this, "Some fields are Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Contact found is empty", Toast.LENGTH_SHORT).show();
         }
-
-        if(!validator.validateRadioGroupEmpty(binding.cough))
-        {
-            if(getRadioGroupSelectedText(binding.cough).equals("Yes")) {
-                if (validator.validateRadioGroupEmpty(binding.coughBlood))
-                {
-                    allClear = false;
-                    Toast.makeText(this, "Cough Blood is Empty", Toast.LENGTH_SHORT).show();
-                }
+        else if(getRadioGroupSelectedText(binding.contactFound).equals("Yes")){
+            if (validator.validateRadioGroupEmpty(binding.cough) || validator.validateRadioGroupEmpty(binding.fever) || validator.validateRadioGroupEmpty(binding.nightSweat) || validator.validateRadioGroupEmpty(binding.swelling) || validator.validateRadioGroupEmpty(binding.tbBefore) || validator.validateRadioGroupEmpty(binding.hivDone) || validator.validateRadioGroupEmpty(binding.hivResult) || validator.validateRadioGroupEmpty(binding.contactReferred) || validator.validateRadioGroupEmpty(binding.symptomScreen)) {
+                allClear = false;
+                Toast.makeText(this, "Some fields are Empty", Toast.LENGTH_SHORT).show();
             }
-        }
 
-        if(!validator.validateRadioGroupEmpty(binding.fever))
-        {
-            if(getRadioGroupSelectedText(binding.fever).equals("Yes")) {
-                if (binding.feverDuration.getText().toString().equals(""))
-                {
-                    allClear = false;
-                    Toast.makeText(this, "Fever duration is empty", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    int duration  = Integer.parseInt(binding.feverDuration.getText().toString());
-                    if(duration > 30)
-                    {
-                         allClear = false;
-                        Toast.makeText(this, "Fever duration must be less than 30", Toast.LENGTH_SHORT).show();
+            if (!validator.validateRadioGroupEmpty(binding.cough)) {
+                if (getRadioGroupSelectedText(binding.cough).equals("Yes")) {
+                    if (validator.validateRadioGroupEmpty(binding.coughBlood)) {
+                        allClear = false;
+                        Toast.makeText(this, "Cough Blood is Empty", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
-        }
 
-        if(binding.date.getText().toString().equals(""))
-        {
-            allClear = false;
-            Toast.makeText(this, "Please select Date", Toast.LENGTH_SHORT).show();
-        }
+            if (!validator.validateRadioGroupEmpty(binding.fever)) {
+                if (getRadioGroupSelectedText(binding.fever).equals("Yes")) {
+                    if (binding.feverDuration.getText().toString().equals("")) {
+                        allClear = false;
+                        Toast.makeText(this, "Fever duration is empty", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int duration = Integer.parseInt(binding.feverDuration.getText().toString());
+                        if (duration > 30) {
+                            allClear = false;
+                            Toast.makeText(this, "Fever duration must be less than 30", Toast.LENGTH_SHORT).show();
+                        }
 
-
-        if(age > 14)
-        {
-            if(validator.validateRadioGroupEmpty(binding.weightLoss))
-            {
-                allClear = false;
-                Toast.makeText(this, "Weight loss is empty", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
-        }
-        else
-        {
-            if(validator.validateRadioGroupEmpty(binding.weightLossChild))
-            {
+
+            if (binding.date.getText().toString().equals("")) {
                 allClear = false;
-                Toast.makeText(this, "Weight loss is empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select Date", Toast.LENGTH_SHORT).show();
+            }
+
+
+            if (age > 14) {
+                if (validator.validateRadioGroupEmpty(binding.weightLoss)) {
+                    allClear = false;
+                    Toast.makeText(this, "Weight loss is empty", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (validator.validateRadioGroupEmpty(binding.weightLossChild)) {
+                    allClear = false;
+                    Toast.makeText(this, "Weight loss is empty", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -319,36 +334,36 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
 
 
 
-        observations.add(new String[]{"DATE CONTACT SCREENED",App.getSqlDateTime(screenCalendar)});
-        observations.add(new String[]{"HAVE COUGH",getRadioGroupSelectedText(binding.cough)});
-        if(getRadioGroupSelectedText(binding.cough).equals("Yes"))
-        {
+
+        observations.add(new String[]{"CONTACT FOUND",getRadioGroupSelectedText(binding.contactFound)});
+        if(getRadioGroupSelectedText(binding.contactFound).equals("Yes")) {
+            observations.add(new String[]{"DATE CONTACT SCREENED", App.getSqlDateTime(screenCalendar)});
+            observations.add(new String[]{"HAVE COUGH", getRadioGroupSelectedText(binding.cough)});
+            if (getRadioGroupSelectedText(binding.cough).equals("Yes")) {
                 observations.add(new String[]{"COUGHING HOW LONG", binding.coughDuration.getSelectedItem().toString()});
                 observations.add(new String[]{"COUGHING BLOOD", getRadioGroupSelectedText(binding.coughBlood)});
-        }
-         observations.add(new String[]{"HAVE FEVER", getRadioGroupSelectedText(binding.fever)});
-         if(getRadioGroupSelectedText(binding.fever).equals("Yes")) {
-            observations.add(new String[]{"FEVER HOW LONG", binding.feverDuration.getText().toString()});
-        }
-        observations.add(new String[]{"ABNORMAL NIGHTS SWEATS",getRadioGroupSelectedText(binding.nightSweat)});
+            }
+            observations.add(new String[]{"HAVE FEVER", getRadioGroupSelectedText(binding.fever)});
+            if (getRadioGroupSelectedText(binding.fever).equals("Yes")) {
+                observations.add(new String[]{"FEVER HOW LONG", binding.feverDuration.getText().toString()});
+            }
+            observations.add(new String[]{"ABNORMAL NIGHTS SWEATS", getRadioGroupSelectedText(binding.nightSweat)});
 
-        if(age >14)
-        {
-            observations.add(new String[]{"WEIGHT LOSS 3KG PER MONTH", getRadioGroupSelectedText(binding.weightLoss)});
+            if (age > 14) {
+                observations.add(new String[]{"WEIGHT LOSS 3KG PER MONTH", getRadioGroupSelectedText(binding.weightLoss)});
+            } else {
+                observations.add(new String[]{"WEIGHT LOSS OR FAILURE TO GAIN WEIGHT", getRadioGroupSelectedText(binding.weightLossChild)});
+                observations.add(new String[]{"WEIGHT MEASURING PERIOD", binding.weightlossPeriod.getSelectedItem().toString()});
+            }
+
+            observations.add(new String[]{"SWELLING OR LUMPS", getRadioGroupSelectedText(binding.swelling)});
+            observations.add(new String[]{"HAD TB BEFORE", getRadioGroupSelectedText(binding.tbBefore)});
+            observations.add(new String[]{"HIV TEST DONE", getRadioGroupSelectedText(binding.hivDone)});
+            observations.add(new String[]{"HIV RESULT", getRadioGroupSelectedText(binding.hivResult)});
+            observations.add(new String[]{"CONTACT REFERRED FOR EVALUATION", getRadioGroupSelectedText(binding.contactReferred)});
+            observations.add(new String[]{"SYMPTOM SCREEN", getRadioGroupSelectedText(binding.symptomScreen)});
+
         }
-        else {
-            observations.add(new String[]{"WEIGHT LOSS OR FAILURE TO GAIN WEIGHT", getRadioGroupSelectedText(binding.weightLossChild)});
-            observations.add(new String[]{"WEIGHT MEASURING PERIOD", binding.weightlossPeriod.getSelectedItem().toString()});
-        }
-
-        observations.add(new String[]{"SWELLING OR LUMPS", getRadioGroupSelectedText(binding.swelling)});
-        observations.add(new String[]{"HAD TB BEFORE", getRadioGroupSelectedText(binding.tbBefore)});
-        observations.add(new String[]{"HIV TEST DONE", getRadioGroupSelectedText(binding.hivDone)});
-        observations.add(new String[]{"HIV RESULT",getRadioGroupSelectedText(binding.hivResult)});
-        observations.add(new String[]{"CONTACT REFERRED FOR EVALUATION", getRadioGroupSelectedText(binding.contactReferred)});
-        observations.add(new String[]{"SYMPTOM SCREEN", getRadioGroupSelectedText(binding.symptomScreen)});
-
-
 
 
 

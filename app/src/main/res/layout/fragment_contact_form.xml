@@ -146,35 +146,48 @@
 
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        >
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <EditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@string/promt_contact_found" />
+
+            <RadioGroup
+                android:id="@+id/contact_found"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/prompt_contact_id"
+                android:orientation="horizontal"
 
-                />
-        </android.support.design.widget.TextInputLayout>
+                >
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/search"
-            android:layout_weight="0.5"
-            android:padding="5dp"
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Yes" />
 
-            />
+                <RadioButton
 
-    </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="No" />
 
+
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -704,6 +717,7 @@
             </RadioGroup>
 
 
+        </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
