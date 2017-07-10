@@ -58,11 +58,11 @@ public class OfflineFormAdapter extends RecyclerView.Adapter<OfflineFormAdapter.
         {
             if(age >16)  // Man
             {
-                holder.rowImage.setImageResource(R.drawable.ic_man);
+                holder.rowImage.setImageResource(R.drawable.ic_man2);
             }
             else  // boy
             {
-                holder.rowImage.setImageResource(R.drawable.ic_boy);
+                holder.rowImage.setImageResource(R.drawable.ic_man2);
             }
 
         }
@@ -70,11 +70,11 @@ public class OfflineFormAdapter extends RecyclerView.Adapter<OfflineFormAdapter.
         {
             if(age >16)  // WoMan
             {
-                holder.rowImage.setImageResource(R.drawable.ic_women);
+                holder.rowImage.setImageResource(R.drawable.ic_woman2);
             }
             else  // girl
             {
-                holder.rowImage.setImageResource(R.drawable.ic_girl);
+                holder.rowImage.setImageResource(R.drawable.ic_woman2);
             }
 
 

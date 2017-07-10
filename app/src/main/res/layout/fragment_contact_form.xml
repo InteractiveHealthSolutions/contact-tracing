@@ -648,7 +648,45 @@
         </RadioGroup>
 </LinearLayout>
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="7dp"
+
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/prompt_sym_screen"
+                    android:gravity="center_vertical"
+                    />
+                <RadioGroup
+                    android:id="@+id/symptom_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+
+                    >
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Well"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Symptomatic"
+                        />
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -682,42 +720,50 @@
             </RadioGroup>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="7dp"
 
-            >
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/prompt_sym_screen"
-                android:gravity="center_vertical"
-                />
-            <RadioGroup
-                android:id="@+id/symptom_screen"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:padding="7dp"
+                android:id="@+id/layout_referral_reason"
 
                 >
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Well"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/prompt_referral_reason"
+                    android:gravity="center_vertical"
                     />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/referral_reason"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Symptomatic"
-                    />
-            </RadioGroup>
+                    android:orientation="vertical"
+
+                    >
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="IPT"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Further TB Assessment"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="HIV Testing"
+                        />
+                </RadioGroup>
 
 
-        </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

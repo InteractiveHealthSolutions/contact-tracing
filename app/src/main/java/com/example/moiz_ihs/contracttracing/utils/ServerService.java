@@ -43,6 +43,8 @@ import com.example.moiz_ihs.contracttracing.models.gfatm_model.Patient;
 import com.example.moiz_ihs.contracttracing.models.gfatm_model.PersonAttributeType;
 import com.example.moiz_ihs.contracttracing.models.gfatm_model.TreatmentUser;
 import com.example.moiz_ihs.contracttracing.models.gfatm_model.User;
+import com.example.moiz_ihs.contracttracing.models.response.index_user.IndexUserResponse;
+import com.example.moiz_ihs.contracttracing.models.response.index_user.Result;
 import com.example.moiz_ihs.contracttracing.models.response.login.LoginResponse;
 import com.google.gson.Gson;
 
@@ -649,7 +651,7 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public void savePatientLocally(String  patientId,String givenName,String familyName,String gender,String dob)
+    public void savePatientLocally(String  patientId,String givenName,String familyName,String gender,String dob,String uuid)
     {
         ContentValues values3 = new ContentValues();
         values3.put("identifier", patientId);
@@ -657,6 +659,7 @@ public class ServerService {
         values3.put("last_name", familyName);
         values3.put("gender", gender);
         values3.put("birthdate", dob);
+        values3.put("uuid",uuid);
         dbUtil.insert(Metadata.PATIENT, values3);
 
     }
@@ -2542,4 +2545,44 @@ public class ServerService {
     }
 
 
+    public String getAllPatientsByIdentifier(String id) {
+
+       String response =  httpGet.getAllPatientsByIdentifier(id);
+       Gson gson = new Gson();
+
+        if(response == null || response.equals(""))
+        {
+            return "FAILED";
+        }
+        else {
+
+            IndexUserResponse users = gson.fromJson(response, IndexUserResponse.class);
+
+            for (Result result : users.getResults()) {
+                int dashIndex = result.getDisplay().lastIndexOf('-');
+                int lastIndex = result.getDisplay().length();
+
+                String identifier = result.getDisplay().substring(0, dashIndex-1);
+                String name = result.getDisplay().substring(dashIndex + 2, lastIndex);
+
+                String firstName, lastName = "";
+                if (name.contains(" ")) {
+                    String[] splited = name.split("\\s+");
+                    firstName = splited[0];
+                    lastName = splited[1];
+                } else {
+                    firstName = name;
+                    lastName = "test";
+                }
+                Calendar now = Calendar.getInstance();
+
+                int yearOfBirth = 17;  // this is another dummy entry
+
+                now.add(Calendar.YEAR, -yearOfBirth);
+
+                savePatientLocally(identifier, firstName, lastName, "MALE", App.getSqlDate(now.getTime()), result.getUuid());  // This is hardcoded Male Entry because we don't know in the response that the patient is Male or female
+            }
+        }
+        return "SUCCESS";
+    }
 }

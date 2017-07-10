@@ -36,6 +36,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIV TEST DONE',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIV RESULT',NULL,'Coded','be2f2581-4775-418b-bdce-ef9bd4720cf3');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT REFERRED FOR EVALUATION',NULL,'Coded','99b84ff4-f76a-44f7-8e6c-6bbe0948097e');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SYMPTOM SCREEN',NULL,'Coded','a4f1c8b3-107f-4a58-8dac-68445bd53a34');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR REFERRAL',NULL,'Coded','ad491983-368b-4ac0-8184-ead5de4a01ec');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WELL','Well','Boolean','dbe5a47c-f4c9-43b9-8d21-90c9e42d2683');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SYMPTOMATIC','Symptomatic','N/A','80904c67-3eff-11e7-ba14-080027089398');
@@ -51,6 +52,9 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LESS THAN ONE W
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ONE TO TWO WEEK','1-2 weeks','Boolean','a5b37bd6-2fde-4679-8f0f-11b056b0a339');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TWO TO FOUR WEEKS','2 weeks-4 weeks','Boolean','defcf8b5-9ebe-4637-88d3-d2596237b3d7');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GREATER THAN FOUR WEEKS','greater than 4 weeks','Boolean','8abb6266-13de-4b2d-81ba-c7a118f54d2c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT','IPT','Boolean','dc58f46f-ee5c-47f7-9b92-300d82fff1c2');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIV TESTING','HIV Testing','Boolean','b14b3383-2157-4648-81e5-42827432286e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FURTHER TB ASSESSMENT','Further TB Assessment','N/A','d56c9041-c2c4-41e5-8a7f-cb2d6aebe93c');
 
 
 --Person Attributes

@@ -48,30 +48,17 @@ public class ContactTraceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contact_trace);
-
-
-
         gson = new Gson();
+        initRecyclerView();
+        setListeners();
 
+    }
 
-
-
-
-        // recyclerView =  binding.recycler;
+    private void initRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
         adapter = new ContactsAdapter(list);
         binding.recycler.setAdapter(adapter);
-
-/**
- * comment these three lines
- */
-//        isSearched = true;
-//        adapter = new ContactsAdapter(list);
-//        binding.recycler.setAdapter(adapter);
-
-        setListeners();
-
     }
 
     private void updateDataModel(String name, String cid, String age, String gender,boolean isFormCompleted) {
@@ -86,8 +73,6 @@ public class ContactTraceActivity extends AppCompatActivity {
         detail.setContactFormCompleted(isFormCompleted);
         list.add(detail);
 
-
-        //ContentProvider provider = new Con
     }
 
     private void setListeners() {
@@ -134,6 +119,10 @@ public class ContactTraceActivity extends AppCompatActivity {
         }
 
         String intid = serverService.getPatientSystemIdByIdentifierLocalDB(id);
+
+       String response =  serverService.getAllPatientsByIdentifier(id);
+
+
         String encounterType = "CONTACT INFORMATION";
         Object[][] encounters = serverService.getLatestEncounter(intid,encounterType);
         Object[][] obs = new Object[0][];
@@ -146,8 +135,6 @@ public class ContactTraceActivity extends AppCompatActivity {
                     filterAdapterData(obs);
                 }
             }
-
-
         }
         else
         {
@@ -168,23 +155,19 @@ public class ContactTraceActivity extends AppCompatActivity {
         {
             if(obs[i][1].toString().contains("NAME"))
             {
-              //  name = obs[i][1].toString().replace("CONTACT","");   //0 is value and 1 is display of ob
                 name = obs[i][0].toString();
             }
 
             if(obs[i][1].toString().contains("AGE"))
             {
-               // age = obs[i][1].toString().replace("CONTACT","");
                 age =  obs[i][0].toString();
             }
             if(obs[i][1].toString().contains("ID"))
             {
-               // contactId = obs[i][1].toString().replace("CONTACT","");
                 contactId = obs[i][0].toString();
             }
             if(obs[i][1].toString().contains("GENDER"))
             {
-                //gender = obs[i][1].toString().replace("CONTACT","");
                 gender = obs[i][0].toString();
 
             }
@@ -194,7 +177,7 @@ public class ContactTraceActivity extends AppCompatActivity {
 
         ServerService serverService = new ServerService(this);
         com.example.moiz_ihs.contracttracing.models.gfatm_model.Patient localPatient = serverService.getPatientByIdentifierFromLocalDB(contactId);
-        //String uuid = serverService.getPatientIdentifierBySystemIdLocalDB(contactId);
+
 
         boolean isFormCompleted = false;
       if(localPatient == null)
@@ -207,42 +190,43 @@ public class ContactTraceActivity extends AppCompatActivity {
               isFormCompleted = false;
           else
               isFormCompleted = true;
-
       }
 
 
-        if(!isFormCompleted)
-        {
 
-           String message = serverService.getPatient(contactId,false);
-            if(message != null ) {
-                if (message.equalsIgnoreCase("SUCCESS")) {
 
-                    String firstName, lastName = "";
-                    if (name.contains(" ")) {
-                        String[] splited = name.split("\\s+");
-                        firstName = splited[0];
-                        lastName = splited[1];
-                    } else {
-                        firstName = name;
-                        lastName = "test";
-                    }
-
-                    Calendar now = Calendar.getInstance();
-
-                    int yearOfBirth = (int) Double.parseDouble(age);
-
-                    now.add(Calendar.YEAR, -yearOfBirth);
-
-                    serverService.savePatientLocally(contactId, firstName, lastName, gender, App.getSqlDate(now.getTime()));
-                    isFormCompleted = true;
-                }
-            }
-
-        }
+//        if(!isFormCompleted)
+//        {
+//
+//           String message = serverService.getPatient(contactId,false);
+//            if(message != null ) {
+//                if (message.equalsIgnoreCase("SUCCESS")) {
+//
+//                    String firstName, lastName = "";
+//                    if (name.contains(" ")) {
+//                        String[] splited = name.split("\\s+");
+//                        firstName = splited[0];
+//                        lastName = splited[1];
+//                    } else {
+//                        firstName = name;
+//                        lastName = "test";
+//                    }
+//
+//                    Calendar now = Calendar.getInstance();
+//
+//                    int yearOfBirth = (int) Double.parseDouble(age);
+//
+//                    now.add(Calendar.YEAR, -yearOfBirth);
+//
+//                    serverService.savePatientLocally(contactId, firstName, lastName, gender, App.getSqlDate(now.getTime()));
+//                    isFormCompleted = true;
+//                }
+//            }
+//
+//        }
 
             updateDataModel(name, contactId, age, gender,isFormCompleted);
-        if(list.size()> 0) {
+          if(list.size()> 0) {
             isSearched = true;
             adapter.notifyDataSetChanged();
            // binding.recycler.setAdapter(adapter);

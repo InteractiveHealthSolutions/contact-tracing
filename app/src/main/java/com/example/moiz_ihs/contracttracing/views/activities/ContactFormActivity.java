@@ -45,6 +45,8 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
     private ArrayList<String[]> observations;
     private static String RELATIONSHIP_TYPE = "Index";
     private boolean isFormSubmitting = false;
+    private String firstName,lastName  =  "";
+    private Calendar now;
 
 
     public ContactFormActivity() {
@@ -90,22 +92,22 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         {
             if(age >16)
             {
-                binding.contactImage.setImageResource(R.drawable.ic_man);
+                binding.contactImage.setImageResource(R.drawable.ic_man2);
             }
             else
             {
-                binding.contactImage.setImageResource(R.drawable.ic_boy);
+                binding.contactImage.setImageResource(R.drawable.ic_man2);
             }
         }
         else
         {
             if(age >16)
             {
-                binding.contactImage.setImageResource(R.drawable.ic_women);
+                binding.contactImage.setImageResource(R.drawable.ic_woman2);
             }
             else
             {
-                binding.contactImage.setImageResource(R.drawable.ic_girl);
+                binding.contactImage.setImageResource(R.drawable.ic_woman2);
             }
 
         }
@@ -127,6 +129,7 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         binding.fever.setOnCheckedChangeListener(new CustomCheckedListener());
         binding.weightLossChild.setOnCheckedChangeListener(new CustomCheckedListener());
         binding.contactFound.setOnCheckedChangeListener(new CustomCheckedListener());
+        binding.contactReferred.setOnCheckedChangeListener(new CustomCheckedListener());
 
         binding.saveForm.setOnClickListener(new CustomClickListener());
         binding.datePicker.setOnClickListener(new CustomClickListener());
@@ -220,6 +223,23 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
                 }
             }
 
+            if(group.equals(binding.contactReferred))
+            {
+                RadioButton radio = (RadioButton)group.findViewById(checkedId);
+                if(radio.isChecked())
+                {
+                    if(radio.getText().equals("No"))
+                    {
+                        binding.layoutReferralReason.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        binding.layoutReferralReason.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+
 
         }
     }
@@ -279,6 +299,25 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
                     if (validator.validateRadioGroupEmpty(binding.coughBlood)) {
                         allClear = false;
                         Toast.makeText(this, "Cough Blood is Empty", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            if (!validator.validateRadioGroupEmpty(binding.cough)) {
+                if (getRadioGroupSelectedText(binding.cough).equals("Yes")) {
+                    if (validator.validateRadioGroupEmpty(binding.coughBlood)) {
+                        allClear = false;
+                        Toast.makeText(this, "Cough Blood is Empty", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+
+            if (!validator.validateRadioGroupEmpty(binding.contactReferred)) {
+                if (getRadioGroupSelectedText(binding.contactReferred).equals("Yes")) {
+                    if (validator.validateRadioGroupEmpty(binding.referralReason)) {
+                        allClear = false;
+                        Toast.makeText(this, "Refferal reason is Empty", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -363,6 +402,11 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
             observations.add(new String[]{"CONTACT REFERRED FOR EVALUATION", getRadioGroupSelectedText(binding.contactReferred)});
             observations.add(new String[]{"SYMPTOM SCREEN", getRadioGroupSelectedText(binding.symptomScreen)});
 
+            if (getRadioGroupSelectedText(binding.contactReferred).equals("Yes")) {
+                observations.add(new String[]{"REASON FOR REFERRAL", getRadioGroupSelectedText(binding.referralReason)});
+            }
+
+
         }
 
 
@@ -404,7 +448,7 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
     public ContentValues getPatientContent() {
         ContentValues values = new ContentValues();
         String given =  contactDetail.getContactName();
-        String firstName,lastName  =  "";
+
 
         if(given.contains(" "))
         {
@@ -418,7 +462,7 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
             lastName = "test";
         }
 
-        Calendar now = Calendar.getInstance();
+         now = Calendar.getInstance();
 
         int age = (int) Double.parseDouble(contactDetail.getAge());
 
@@ -459,9 +503,11 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
 
                 if(App.getMode().equals("OFFLINE"))
                     Toast.makeText(ContactFormActivity.this, "Saved Offline", Toast.LENGTH_SHORT).show();
-                else
+                else {
                     Toast.makeText(ContactFormActivity.this, "Submit Successfully", Toast.LENGTH_SHORT).show();
-
+                    ServerService serverService = new ServerService(ContactFormActivity.this);
+                    serverService.savePatientLocally(contactDetail.getContactId(),firstName,lastName,contactDetail.getGender(),App.getSqlDate(now.getTime()),"");
+                }
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result",contactPosition);
@@ -480,13 +526,13 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         }
     }
 
-    private void saveOffline() {
-        InvestigationForm form = new InvestigationForm();
-        form.setContactDetail(contactDetail);
-        form.setObservations(observations);
-
-        Toast.makeText(this, "Offline Saved", Toast.LENGTH_SHORT).show();
-    }
+//    private void saveOffline() {
+//        InvestigationForm form = new InvestigationForm();
+//        form.setContactDetail(contactDetail);
+//        form.setObservations(observations);
+//
+//        Toast.makeText(this, "Offline Saved", Toast.LENGTH_SHORT).show();
+//    }
 
 
     private void startLoader() {
@@ -508,15 +554,18 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
                 ft.commit();
             }
 
+            isFormSubmitting = false;
         }
         catch(NullPointerException e)
         {
             e.printStackTrace();
+            isFormSubmitting = false;
             // Log.e("crash", "removeLoader:"  + e.getMessage());
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            isFormSubmitting = false;
         }
 
     }

@@ -229,12 +229,14 @@ return "";
 //        }
 
         String contactUuid = serverService.getPatientUuid(contactIdentifier);
-        String personAttribute = serverService.savePersonAttribute("Index Case Number", indexIdentifier, contactUuid);
+        String personAttribute = serverService.savePersonAttribute("Contact Index Case Number", indexIdentifier, contactUuid);
 
 
         String indexUuid = serverService.getPatientUuid(indexIdentifier);
 
         String relationMessage = serverService.saveRelationBetweenPatient(indexUuid, RELATIONSHIP_TYPE, contactUuid);
+
+
 
 
     }

@@ -370,6 +370,16 @@ public class HttpGet {
      return getJsonResponse(requestUri);
         }
 
+
+    private String getJsonResourceForPatient(String resourceName, String variables) {
+
+        String http = "";
+        http = "http://";
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?q=" + variables;
+
+        return getJsonResponse(requestUri);
+    }
+
     private JSONArray getCustomJsonArray(String resourceName, String variables, String param1, String param2) {
         JSONArray jsonArray = null;
         try {
@@ -441,6 +451,8 @@ public class HttpGet {
 
         return getJsonResponse(requestUri);
     }
+
+
 
 
 
@@ -741,5 +753,10 @@ public class HttpGet {
 
         return getJSONArray(ENCOUNTER_RESOURCE,uuid);
 
+    }
+
+    public String getAllPatientsByIdentifier(String identifier)
+    {
+        return getJsonResourceForPatient(PATIENT_RESOURCE,identifier);
     }
 }
