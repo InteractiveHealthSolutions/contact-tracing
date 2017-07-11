@@ -6,7 +6,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.moiz_ihs.contracttracing.views.activities.OfflineFormActivity"
+    tools:context="com.ihs.android.contracttracing.contracttracing.views.activities.OfflineFormActivity"
     android:orientation="vertical"
     android:layout_margin="16dp"
     >

@@ -737,30 +737,33 @@
                     android:text="@string/prompt_referral_reason"
                     android:gravity="center_vertical"
                     />
-                <RadioGroup
+                <LinearLayout
                     android:id="@+id/referral_reason"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
 
                     >
-                    <RadioButton
+                    <CheckBox
+                        android:id="@+id/ipt"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="IPT"
                         />
 
-                    <RadioButton
+                    <CheckBox
+                        android:id="@+id/further_tb_assessment"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Further TB Assessment"
                         />
-                    <RadioButton
+                    <CheckBox
+                        android:id="@+id/hiv_testing"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="HIV Testing"
                         />
-                </RadioGroup>
+                </LinearLayout>
 
 
             </LinearLayout>

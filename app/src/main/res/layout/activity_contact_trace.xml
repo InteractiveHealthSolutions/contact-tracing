@@ -14,7 +14,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@color/light_white"
-    tools:context="com.example.moiz_ihs.contracttracing.views.activities.ContactTraceActivity">
+    tools:context="com.ihs.android.contracttracing.contracttracing.views.activities.ContactTraceActivity">
 
 
 

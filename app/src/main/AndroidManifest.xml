@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.moiz_ihs.contracttracing.views.activities">
+    package="com.ihs.android.contracttracing.views.activities">
 
     <!-- To auto-complete the email text field in the login fragment_contact_form with the user's emails -->
     >
@@ -16,13 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.moiz_ihs.contracttracing.views.activities.MainActivity"
+            android:name="com.ihs.android.contracttracing.contracttracing.views.activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             ></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.ihs.android.contracttracing.contracttracing.views.activities.LoginActivity"
             android:label="Contact Tracing"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -31,15 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactTraceActivity"
+        <activity android:name="com.ihs.android.contracttracing.contracttracing.views.activities.ContactTraceActivity"
             android:label="@string/search_contact"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".ContactFormActivity"
+        <activity android:name="com.ihs.android.contracttracing.contracttracing.views.activities.ContactFormActivity"
             android:label="@string/contact_form"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".OfflineFormActivity"
+        <activity android:name="com.ihs.android.contracttracing.contracttracing.views.activities.OfflineFormActivity"
             android:label="@string/offline_form"
             android:screenOrientation="portrait"
             ></activity>
