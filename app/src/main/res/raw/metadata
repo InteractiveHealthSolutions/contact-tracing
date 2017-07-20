@@ -5,6 +5,7 @@ INSERT OR IGNORE INTO identifier_type VALUES(3,'Patient ID','05a29f94-c0ed-11e2-
 INSERT OR IGNORE INTO identifier_type VALUES(4,'ENRS','0481be90-41be-4aa2-b0dc-0e82ccff6f5c','N','Registration ID assigned to MDR-TB patients');
 INSERT OR IGNORE INTO identifier_type VALUES(5,'Index Case Number','b84d36ca-bfbf-4f95-8eb2-0296477a6f37','N','Patient ID in an external MRS, like MR. No.');
 INSERT OR IGNORE INTO identifier_type VALUES(6,'INDEX CONTACT IDENTIFIER','6ad8d4b1-53c7-44ea-b3a3-767d6d3be4e0','N','');
+INSERT OR IGNORE INTO identifier_type VALUES(7,'INDEX UNAVAILABLE CONTACT IDENTIFIER','82f1e210-6ecf-4cf8-b543-68920d15175d','N','');
 
 
 -- Encounter
@@ -60,3 +61,4 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FURTHER TB ASSE
 --Person Attributes
 
 INSERT OR IGNORE INTO person_attribute_type VALUES ('Contact Index Case Number','java.lang.String','191658f2-59e9-4d6f-8223-a31124eaa0ca');
+INSERT OR IGNORE INTO person_attribute_type VALUES ('Contact found','java.lang.String','be311e3d-dbfc-40da-8ba8-e110432bc803');

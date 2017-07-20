@@ -433,16 +433,33 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
 
 
         if(returnMessage.equalsIgnoreCase("SUCCESS")) {
+
+            //com.ihs.android.contracttracing.contracttracing.models.gfatm_model.Patient contact =  serverService.getIndexPatientByIdentifierFromLocalDB(contactDetail.getContactId());
             String contactUuid = serverService.getPatientUuid(contactDetail.getContactId());
+           // String contactUuid = contact.getUuid();
             String personAttribute = serverService.savePersonAttribute("Contact Index Case Number", contactDetail.getIndexId(), contactUuid);
 
+            com.ihs.android.contracttracing.contracttracing.models.gfatm_model.Patient index = serverService.getIndexPatientByIdentifierFromLocalDB(contactDetail.getIndexId());
 
-            String indexUuid = serverService.getPatientUuid(contactDetail.getIndexId());
+            String indexUuid = index.getUuid();
 
             String relationMessage = serverService.saveRelationBetweenPatient(indexUuid, RELATIONSHIP_TYPE, contactUuid);
 
-             returnMessage = serverService.saveEncounterAndObservation("CONTACT INVESTIGATION", null, formDateCalendar, observations.toArray(new String[][]{}), false, contactUuid, indexUuid);
+            returnMessage = serverService.saveEncounterAndObservation("CONTACT INVESTIGATION", null, formDateCalendar, observations.toArray(new String[][]{}), false, contactUuid, indexUuid,contactDetail.getContactId());
         }
+        else
+        {
+            com.ihs.android.contracttracing.contracttracing.models.gfatm_model.Patient index = serverService.getIndexPatientByIdentifierFromLocalDB(contactDetail.getIndexId());
+            com.ihs.android.contracttracing.contracttracing.models.gfatm_model.Patient contact = serverService.getContactPatientByIdentifierFromLocalDB(contactDetail.getContactId());
+            if(contact != null && index !=null) {
+                returnMessage = serverService.saveEncounterAndObservation("CONTACT INVESTIGATION", null, formDateCalendar, observations.toArray(new String[][]{}), false, contact.getUuid(), index.getUuid(),contactDetail.getContactId());
+            }
+            else {
+                returnMessage = "";
+            }
+
+            }
+
 
 
         return returnMessage;
@@ -464,7 +481,7 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         else
         {
             firstName = given;
-            lastName = "test";
+            lastName = "-";
         }
 
          now = Calendar.getInstance();
@@ -474,12 +491,12 @@ public class ContactFormActivity extends AppCompatActivity implements DatePicker
         now.add(Calendar.YEAR,-age);
 
 
-        values.put("patientId", contactDetail.getContactId());
+        values.put("patientId",  contactDetail.getContactId() );
         values.put("firstName",firstName);
         values.put("lastName", lastName);
         values.put("gender", contactDetail.getGender());
         values.put("dob", App.getSqlDate(now.getTime()));
-        values.put("externalId", "" );
+        values.put("externalId", contactDetail.getContactId() );
         values.put("indexId",contactDetail.getIndexId());
         //App.setPatient(patient);
 

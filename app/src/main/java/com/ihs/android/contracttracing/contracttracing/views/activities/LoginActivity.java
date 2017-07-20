@@ -1,5 +1,6 @@
 package com.ihs.android.contracttracing.contracttracing.views.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,9 @@ import android.os.AsyncTask;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -16,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,10 +63,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         DevicePreference.getInstance().init(this);
 
-
-        App.setIp(Constants.SERVER_IP);
-        App.setPort(Constants.PORT);
         serverService = new ServerService(this);
+        if(DevicePreference.getInstance().getServerAddress().equals(""))
+        {
+            App.setIp(Constants.SERVER_IP);
+            App.setPort(Constants.PORT);
+            DevicePreference.getInstance().setServerAddress(Constants.SERVER_IP);
+            DevicePreference.getInstance().setServerPort(Constants.PORT);
+        }
+        else
+        {
+            App.setIp(DevicePreference.getInstance().getServerAddress());
+            App.setPort(DevicePreference.getInstance().getServerPort());
+        }
 
         // Set up the login fragment_contact_form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -91,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                 App.setCommunicationMode("REST");
                 App.setUsername(mEmailView.getText().toString());
                 App.setPassword(mPasswordView.getText().toString());
+                AuthenticateUser authenticateUser = new AuthenticateUser();
 
                 if (validateForm()) {
 
@@ -109,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            AuthenticateUser();
+                  authenticateUser.execute("");
+
                         }
                     }
 //            else
@@ -120,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     else {
                         App.setUsername(mEmailView.getText().toString());
                         App.setPassword(mPasswordView.getText().toString());
-                        AuthenticateUser();
+                        authenticateUser.execute("");
                     }
                 }
 
@@ -161,63 +177,122 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-    private void AuthenticateUser() {
-        AsyncTask<String,String,String> authenticate = new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... params) {
-                startLoader();
-
-                String result = serverService.getUser();
-                return result;
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                if (s.equals("SUCCESS")) {
-
-                    removeLoader();
-                    PersonAttributeType.UserCredentials credentials = new PersonAttributeType.UserCredentials();
-                    credentials.setUsername(App.getUsername());
-                    credentials.setPassword(App.getPassword());
-
-                    if(mRememberMe.isChecked()) {
-                        DevicePreference.getInstance().saveUser(credentials);
-                    }
-                    else
-                    {
-                        DevicePreference.getInstance().saveUser(null);
-                    }
-
-                    dbUtil = new DatabaseUtil(getApplicationContext());
-                    Boolean flag = dbUtil.doesDatabaseExist();
-                    if (!flag) {
-                        dbUtil.buildDatabase(false);            // build sql lite db in app memory
-                    }
-                    else{
-                        dbUtil.getWritableDatabase();
-                    }
-
-
-
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                    finish();
-                }
-                else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                            removeLoader();
-                        }
-                    });
-                }
-            }
-        };
-
-        authenticate.execute("");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+//            case R.id.action_refresh:
+//                Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
+//                        .show();
+//                break;
+//            // action with ID action_settings was selected
+            case R.id.action_settings:
+               showCustomDialog();
+                break;
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    private void showCustomDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setTitle("Select Ip Address");
+
+        // set the custom dialog components - text, image and button
+//        TextView text = (TextView) dialog.findViewById(R.id.text);
+//        text.setText("Android custom dialog example!");
+
+        final EditText ip = (EditText) dialog.findViewById(R.id.web_ip);
+        final EditText port = (EditText) dialog.findViewById(R.id.web_port);
+
+
+        ip.setText(App.getIp());
+        port.setText(App.getPort());
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.save_web_address);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.setIp(ip.getText().toString());
+                App.setPort(port.getText().toString());
+                DevicePreference.getInstance().setServerAddress(ip.getText().toString());
+                DevicePreference.getInstance().setServerPort(port.getText().toString());
+                serverService = new ServerService(LoginActivity.this);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private class AuthenticateUser extends  AsyncTask<String, String, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            startLoader();
+            ServerService serverService = new ServerService(LoginActivity.this);
+            String result = serverService.getUser();
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s.equals("SUCCESS")) {
+
+                removeLoader();
+                PersonAttributeType.UserCredentials credentials = new PersonAttributeType.UserCredentials();
+                credentials.setUsername(App.getUsername());
+                credentials.setPassword(App.getPassword());
+
+                if(mRememberMe.isChecked()) {
+                    DevicePreference.getInstance().saveUser(credentials);
+                }
+                else
+                {
+                    DevicePreference.getInstance().saveUser(null);
+                }
+
+                dbUtil = new DatabaseUtil(getApplicationContext());
+                Boolean flag = dbUtil.doesDatabaseExist();
+                if (!flag) {
+                    dbUtil.doesDatabaseExist();
+                    dbUtil.buildDatabase(false);            // build sql lite db in app memory
+                }
+                else{
+                    dbUtil.getWritableDatabase();
+                }
+
+
+
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                finish();
+            }
+            else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        removeLoader();
+                    }
+                });
+            }
+        }
+    }
+
+
 
 
 
@@ -253,6 +328,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 }
 

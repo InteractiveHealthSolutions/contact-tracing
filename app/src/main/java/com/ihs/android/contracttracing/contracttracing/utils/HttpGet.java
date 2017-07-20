@@ -375,7 +375,7 @@ public class HttpGet {
 
         String http = "";
         http = "http://";
-        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?q=" + variables;
+        String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "?q=" + variables + "&v=full";
 
         return getJsonResponse(requestUri);
     }

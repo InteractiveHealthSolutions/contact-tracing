@@ -61,14 +61,15 @@ public class Patient extends AbstractModel {
 
                 if (display.contains("Index Case Number")) {
                     patientId = display.replace("Index Case Number = ", "");
-                } else if (display.contains("External ID")) {
-                    externalId = display.replace("External ID = ", "");
-                } else if (display.contains("ENRS")) {
-                    enrs = display.replace("ENRS = ", "");
-                } else if (display.contains("endTB EMR ID")) {
-                    endTBId = display.replace("endTB EMR ID = ", "");
+                } else if (display.contains("INDEX CONTACT IDENTIFIER")) {
+                    externalId = display.replace("INDEX CONTACT IDENTIFIER = ", "");
+                } else if (display.contains("INDEX UNAVAILABLE CONTACT IDENTIFIER")) {
+                    enrs = display.replace("INDEX UNAVAILABLE CONTACT IDENTIFIER = ", "");
                 }
 
+            }
+            if (patientId == null || patientId.trim().equals("")){
+                patientId = uuid;
             }
 
         } catch (JSONException e) {

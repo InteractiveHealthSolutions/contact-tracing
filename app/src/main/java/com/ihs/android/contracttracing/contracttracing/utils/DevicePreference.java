@@ -21,6 +21,8 @@ public class DevicePreference{
     public static DevicePreference instance = null;
     private Context context;
     private final String userKey = "user";
+    private final String serverAddressKey = "ip";
+    private final String serverportKey = "port";
     private final String formKey = "user";
     private List<InvestigationForm> formList;
 
@@ -61,6 +63,31 @@ public class DevicePreference{
        String json = preferences.getString(userKey,"");
         return  gson.fromJson(json,PersonAttributeType.UserCredentials.class);
     }
+
+    public String getServerAddress()
+    {
+        String address = preferences.getString(serverAddressKey,"");
+
+        return address;
+    }
+
+    public void setServerPort(String serverAddress)
+    {
+        preferences.edit().putString(serverportKey,serverAddress).commit();
+    }
+
+    public String getServerPort()
+    {
+        String address = preferences.getString(serverportKey,"");
+
+        return address;
+    }
+
+    public void setServerAddress(String serverAddress)
+    {
+        preferences.edit().putString(serverAddressKey,serverAddress).commit();
+    }
+
 
 //    public List<InvestigationForm> getFormList()
 //    {

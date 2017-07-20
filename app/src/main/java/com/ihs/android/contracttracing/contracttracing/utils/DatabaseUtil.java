@@ -153,7 +153,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         SQLiteDatabase writableDatabase = util.getWritableDatabase();
         long result = writableDatabase.insert(table, null, values);
         if (result == -1) {
-            result = writableDatabase.insert(table, null, values);
+           // result = writableDatabase.insert(table, null, values);
         }
         writableDatabase.close();
         boolean check = (result != -1);

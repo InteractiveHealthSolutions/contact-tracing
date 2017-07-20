@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ihs.android.contracttracing.contracttracing.models.response.offline_payloads.PatientModel;
+import com.ihs.android.contracttracing.contracttracing.models.response.offline_payloads.PersonModel;
 import com.ihs.android.contracttracing.contracttracing.utils.CommonUtils;
 import com.ihs.android.contracttracing.contracttracing.models.gfatm_model.Patient;
 import com.ihs.android.contracttracing.contracttracing.models.response.index_user.IndexUserResponse;
@@ -26,6 +28,9 @@ import com.ihs.android.contracttracing.contracttracing.utils.ServerService;
 
 import com.google.gson.Gson;
 import com.ihs.android.contracttracing.views.activities.databinding.ActivityContactTraceBinding;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,8 @@ public class ContactTraceActivity extends AppCompatActivity {
    // DatabaseUtil dbUtils;
     private IndexUserResponse indexUser;
     private Patient patient;
+    private final String FORM_CREATE_PATIENT = "CREATE PATIENT";
+    private final String FORM_CONTACT_INVESTIGATION = "CONTACT INVESTIGATION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,7 @@ public class ContactTraceActivity extends AppCompatActivity {
 
         detail.setAge(age);
         detail.setGender(gender);
-        detail.setIndexName(patient.getPerson().getGivenName());
+        detail.setIndexName(name);
         detail.setIndexId(id);
         detail.setContactFormCompleted(isFormCompleted);
         list.add(detail);
@@ -103,7 +110,8 @@ public class ContactTraceActivity extends AppCompatActivity {
         boolean isPatientFound = false;
         ServerService serverService = new ServerService(ContactTraceActivity.this);
 
-        patient = serverService.getPatientByIdentifierFromLocalDB(id);
+
+        patient = serverService.getIndexPatientByIdentifierFromLocalDB(id);
         if(patient != null)
         {
             isPatientFound =  true;
@@ -111,16 +119,14 @@ public class ContactTraceActivity extends AppCompatActivity {
             binding.indexLayout.parentLayout.setVisibility(View.VISIBLE);
             binding.indexLayout.contactName.setText("Index Name : "+patient.getPerson().getGivenName() +" "+ patient.getPerson().getFamilyName());
             binding.indexLayout.indexId.setText("Gender : "+patient.getPerson().getGender());
-           // binding.indexLayout.contactId.setText(" Age : "+patient.getPerson().getAge());
-            binding.indexLayout.contactId.setText("");
+            binding.indexLayout.contactId.setText(" Age : "+patient.getPerson().getAge());
+           // binding.indexLayout.contactId.setText("");
         }
         else {
             binding.indexLayout.parentLayout.setVisibility(View.GONE);
         }
 
         String intid = serverService.getPatientSystemIdByIdentifierLocalDB(id);
-
-       String response =  serverService.getAllPatientsByIdentifier(id);
 
 
         String encounterType = "CONTACT INFORMATION";
@@ -176,56 +182,76 @@ public class ContactTraceActivity extends AppCompatActivity {
         }
 
         ServerService serverService = new ServerService(this);
-        Patient localPatient = serverService.getPatientByIdentifierFromLocalDB(contactId);
-
+        //Patient localPatient = serverService.getPatientByIdentifierFromLocalDB(contactId);
+        String intid = serverService.getContactPatientSystemIdByIdentifierLocalDB(contactId);
 
         boolean isFormCompleted = false;
-      if(localPatient == null)
-      {
-          isFormCompleted =false;
-      }
-      else
-      {
-          if(localPatient.getPerson() == null)
-              isFormCompleted = false;
-          else
-              isFormCompleted = true;
-      }
+
+        if(intid != null) {
+            String encounterType = "CONTACT INVESTIGATION";
+            Object[][] encounters = serverService.getLatestEncounter(intid, encounterType);
+            if (encounters != null || encounters.length == 0) {
+
+                for (int i = 0; i < encounters.length; i++) {
+                    obs = (Object[][]) serverService.getAllObsFromEncounterId(Integer.parseInt((String) encounters[i][1]));
+                    if(obs != null) {
+                     isFormCompleted = isContactFound(obs);
+                        if(isFormCompleted)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        Object[][] offlineEncounters =   serverService.getOfflineFormContent(FORM_CONTACT_INVESTIGATION);
+        Gson gson = new Gson();
+        for(int i= 0 ; i < offlineEncounters.length;i++) {
+
+          //  PatientModel patientDetails = gson.fromJson(offlinePatient[i][0].toString(), PatientModel.class);
+
+            String json = offlineEncounters[i][0].toString();
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(json);
+                String patientUuid =  jsonObject.get("patient").toString();
+                Patient patient = serverService.getPatientByUuidFromLocalDB(patientUuid);
+
+                if(patient == null)
+                {
+                    patient = serverService.getContactPatientByIdentifierFromLocalDB(patientUuid);
+                }
+                if(patient != null) {
+                    if (patient.getPatientId().equals(contactId)) {
+                        isFormCompleted = true;
+                    }
+
+
+                if(patient.getExternalId() != null)
+                {
+                    if(patient.getExternalId().equals(contactId))
+                        isFormCompleted = true;
+                }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+//      else
+//      {
+//          if(localPatient.getPerson() == null)
+//              isFormCompleted = false;
+//          else
+//              isFormCompleted = true;
+//      }
 
 
 
-
-//        if(!isFormCompleted)
-//        {
-//
-//           String message = serverService.getPatient(contactId,false);
-//            if(message != null ) {
-//                if (message.equalsIgnoreCase("SUCCESS")) {
-//
-//                    String firstName, lastName = "";
-//                    if (name.contains(" ")) {
-//                        String[] splited = name.split("\\s+");
-//                        firstName = splited[0];
-//                        lastName = splited[1];
-//                    } else {
-//                        firstName = name;
-//                        lastName = "test";
-//                    }
-//
-//                    Calendar now = Calendar.getInstance();
-//
-//                    int yearOfBirth = (int) Double.parseDouble(age);
-//
-//                    now.add(Calendar.YEAR, -yearOfBirth);
-//
-//                    serverService.savePatientLocally(contactId, firstName, lastName, gender, App.getSqlDate(now.getTime()));
-//                    isFormCompleted = true;
-//                }
-//            }
-//
-//        }
-
-            updateDataModel(name, contactId, age, gender,isFormCompleted);
+         updateDataModel(name, contactId, age, gender,isFormCompleted);
           if(list.size()> 0) {
             isSearched = true;
             adapter.notifyDataSetChanged();
@@ -239,6 +265,17 @@ public class ContactTraceActivity extends AppCompatActivity {
 
     }
 
+    private Boolean isContactFound(Object[][] obs) {
+        String isFoundString = "";
+
+        for (int i = 0; i < obs.length; i++) {
+            if (obs[i][1].toString().contains("CONTACT FOUND")) {
+                isFoundString = obs[i][0].toString();
+            }
+
+        }
+        return (isFoundString.equals("YES"))? true : false;
+    }
 
     @Override
     public void onBackPressed() {
@@ -276,7 +313,7 @@ public class ContactTraceActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             ServerService serverService = new ServerService(ContactTraceActivity.this);
             startLoader();
-            return serverService.getPatient(id, true);
+            return serverService.getPatientsBySearcheableIdentifier(id, true);
         }
 
         @Override
